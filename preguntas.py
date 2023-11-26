@@ -148,11 +148,11 @@ def pregunta_04():
 
     # Asigne a la variable los valores de la columna `fertility`
     #X_fertility = ____
-    X_fertility = df["fertility"].values
+    X_fertility = df["fertility"].to_numpy()
 
     # Asigne a la variable los valores de la columna `life`
     #y_life = ____
-    y_life = df["life"].values
+    y_life = df["life"].to_numpy()
 
     # Divida los datos de entrenamiento y prueba. La semilla del generador de números
     # aleatorios es 53. El tamaño de la muestra de entrenamiento es del 80%
@@ -163,7 +163,10 @@ def pregunta_04():
     #     random_state=____,
     # )
     (X_train, X_test, y_train, y_test,) = train_test_split(
-        X_fertility, y_life, test_size=0.2, random_state=53
+        X_fertility.reshape(-1, 1),
+        y_life.reshape(-1, 1),
+        test_size=0.2,
+        random_state=53
     )
 
     # Cree una instancia del modelo de regresión lineal
@@ -172,14 +175,14 @@ def pregunta_04():
 
     # Entrene el clasificador usando X_train y y_train
     #____.fit(____, ____)
-    linearRegression.fit(X_train.reshape(-1, 1), y_train.reshape(-1, 1))
+    linearRegression.fit(X_train, y_train)
 
     # Pronostique y_test usando X_test
     #y_pred = ____
-    y_pred = linearRegression.predict(X_test.reshape(-1, 1))
+    y_pred = linearRegression.predict(X_test)
 
     # Compute and print R^2 and RMSE
     print("R^2: {:6.4f}".format(linearRegression.score(X_test, y_test)))
     #rmse = np.sqrt(____(____, ____))
-    rmse = np.sqrt(mean_squared_error(y_test, y_pred))
+    rmse = np.sqrt(mean_squared_error(y_pred, y_test))
     print("Root Mean Squared Error: {:6.4f}".format(rmse))
